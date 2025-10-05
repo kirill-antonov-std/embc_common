@@ -35,18 +35,34 @@ static void quick_sort_rec(int* nums, int left, int right) {
 }
 
 static void merge(int* nums, int* tmp_nums, int left, int mid, int right) {
+    for (int i = left; i <= right; i++) {
+        tmp_nums[i] = nums[i];
+    }
+    
     int idx_l = left;
-    int idx_r = mid;
-    while (idx_l < mid && idx_r < right) {
-        
+    int idx_r = mid + 1;
+    int idx = left;
+    while (idx_l <= mid && idx_r <= right) {
+        if (tmp_nums[idx_l] <= tmp_nums[idx_r]) {
+            nums[idx++] = tmp_nums[idx_l++];
+        }
+        else {
+            nums[idx++] = tmp_nums[idx_r++];
+        }
+    }
+    while (idx_l <= mid) {
+        nums[idx++] = tmp_nums[idx_l++];
+    }
+    while (idx_r <= right) {
+        nums[idx++] = tmp_nums[idx_r++];
     }
 }
 
 static void merge_sort_rec(int* nums, int* tmp_nums, int left, int right) {
-    if ((right - left) < 2) {
+    if (left >= right) {
         return;
     }
-    int mid = (left + right) / 2;
+    int mid = left + (right - left) / 2;
     merge_sort_rec(nums, tmp_nums, left, mid);
     merge_sort_rec(nums, tmp_nums, mid + 1, right);
     merge(nums, tmp_nums, left, mid, right);
